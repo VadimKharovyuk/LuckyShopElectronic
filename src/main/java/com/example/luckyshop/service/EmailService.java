@@ -22,4 +22,13 @@ public class EmailService {
         // Отправляем сообщение
         emailSender.send(message);
     }
+    public void sendVerificationEmail(String to, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Account Activation");
+        message.setText("Please activate your account using the following link: "
+                + "http://localhost:3045/activate?token=" + token);
+
+        emailSender.send(message);
+    }
     }

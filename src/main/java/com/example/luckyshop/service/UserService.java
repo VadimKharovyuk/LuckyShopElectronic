@@ -1,5 +1,7 @@
 package com.example.luckyshop.service;
+import com.example.luckyshop.model.ActivationToken;
 import com.example.luckyshop.model.User;
+import com.example.luckyshop.repository.ActivationTokenRepository;
 import com.example.luckyshop.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -8,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -15,7 +18,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EntityManager entityManager;
+    private final EmailService emailService;
+    private final ActivationTokenRepository activationTokenRepository;
+
 
 
 
@@ -23,12 +28,52 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User registerUser(User user) {
+    public void registerUser(User user) {
+        // Проверка существования пользователя с таким же email или username
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new IllegalArgumentException("Username is already taken");
+        }
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
+
+        // Устанавливаем пароль и роль по умолчанию
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(User.Role.USER);
-        return userRepository.save(user);
+        user.setRole(User.Role.USER); // Устанавливаем роль по умолчанию
+        user.setBlocked(true); // Устанавливаем пользователя в заблокированный по умолчанию
+
+        // Сохранение пользователя
+        User savedUser = userRepository.save(user);
+
+        // Создание активационного токена
+        String token = UUID.randomUUID().toString();
+        ActivationToken activationToken = new ActivationToken();
+        activationToken.setToken(token);
+        activationToken.setUser(savedUser);
+        activationTokenRepository.save(activationToken);
+
+        // Отправка письма с активацией
+        emailService.sendVerificationEmail(user.getEmail(), token);
     }
 
+
+    public boolean activateUser(String token) {
+        // Проверка токена
+        ActivationToken activationToken = activationTokenRepository.findByToken(token);
+
+        if (activationToken != null && !activationToken.isUsed()) {
+            User user = activationToken.getUser();
+            user.setBlocked(false); // Разблокировка пользователя
+            userRepository.save(user);
+
+            activationToken.setUsed(true); // Отметка токена как использованного
+            activationTokenRepository.save(activationToken);
+
+            return true;
+        }
+
+        return false;
+    }
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

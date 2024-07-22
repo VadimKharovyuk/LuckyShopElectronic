@@ -1,29 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form th:action="@{/register}" th:object="${user}" method="post">
-    <div>
-        <label>Логин:</label>
-        <input type="text" th:field="*{username}" required />
-    </div>
-    <div>
-        <label>Пароль:</label>
-        <input type="password" th:field="*{password}" required />
-    </div>
-    <div>
-        <label>Email:</label>
-        <input type="email" th:field="*{email}" required />
-    </div>
-    <div>
-        <button type="submit">Зарегистрироваться</button>
-    </div>
-</form>
-<p>Уже есть аккаунт? <a th:href="@{/login}">Войти</a></p>
-<p><a href="/">На главную страницу</a></p>
 
-</body>
-</html>
+<div class="container">
+    <h2>Register</h2>
+    <form th:action="@{/register}" th:object="${user}" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+    <p th:if="${message}" class="alert alert-success" th:text="${message}"></p>
+    <p th:if="${error}" class="alert alert-danger" th:text="${error}"></p>
+</div>
