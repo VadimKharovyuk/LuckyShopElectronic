@@ -3,7 +3,6 @@ import com.example.luckyshop.model.ActivationToken;
 import com.example.luckyshop.model.User;
 import com.example.luckyshop.repository.ActivationTokenRepository;
 import com.example.luckyshop.repository.UserRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
