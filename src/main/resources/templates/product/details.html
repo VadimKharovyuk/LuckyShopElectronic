@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Details</title>
+</head>
+<body>
+<h1 th:text="${product.name}">Product Name</h1>
+<p th:text="${product.description}">Product Description</p>
+<p>Price: <span th:text="${product.price}">Price</span></p>
+<form action="#" method="post">
+    <input type="hidden" name="productId" th:value="${product.id}"/>
+    <input type="number" name="quantity" min="1" value="1"/>
+    <button type="submit">Add to Cart</button>
+</form>
+</body>
+</html>

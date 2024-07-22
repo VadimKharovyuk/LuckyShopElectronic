@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/register}" th:object="${user}" method="post">
+    <div>
+        <label>Логин:</label>
+        <input type="text" th:field="*{username}" required />
+    </div>
+    <div>
+        <label>Пароль:</label>
+        <input type="password" th:field="*{password}" required />
+    </div>
+    <div>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required />
+    </div>
+    <div>
+        <button type="submit">Зарегистрироваться</button>
+    </div>
+</form>
+<p>Уже есть аккаунт? <a th:href="@{/login}">Войти</a></p>
+<p><a href="/">На главную страницу</a></p>
+
+</body>
+</html>

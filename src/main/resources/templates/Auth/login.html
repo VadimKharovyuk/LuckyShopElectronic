@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/login}" method="post">
+    <div>
+        <label>Логин:</label>
+        <input type="text" name="username" required />
+    </div>
+    <div>
+        <label>Пароль:</label>
+        <input type="password" name="password" required />
+    </div>
+    <div>
+        <button type="submit">Войти</button>
+    </div>
+</form>
+<p>Забыли пароль? <a th:href="@{/forgot-password}">Сбросить пароль</a></p>
+<p>Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a></p>
+<p><a href="/">На главную страницу</a></p>
+</div>
+
+</body>
+</html>
