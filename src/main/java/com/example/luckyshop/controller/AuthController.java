@@ -50,10 +50,6 @@ public class AuthController {
     public String login(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
         User existingUser = userRepository.findByUsername(user.getUsername());
 
-        if (existingUser == null || !passwordService.matches(user.getPassword(), existingUser.getPassword())) {
-            redirectAttributes.addFlashAttribute("error", "Вы ввели неправильный логин или пароль");
-            return "redirect:/login";
-        }
         // Проверка, заблокирован ли пользователь
         if (existingUser.isBlocked()) {
             // Редирект на страницу с сообщением о блокировке

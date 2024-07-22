@@ -25,24 +25,13 @@ public class PasswordResetController {
         return "Auth/forgot-password";
     }
     @PostMapping("/forgot-password")
-    public String resetPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Пользователь с таким email не найден");
-            return "redirect:/forgot-password";
+    public String handleForgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes) {
+        boolean reset = passwordService.resetPassword(email);
+        if (reset) {
+            redirectAttributes.addFlashAttribute("message", "A new password has been sent to your email.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "No account found with that email.");
         }
-
-        // Генерируем новый пароль
-        String newPassword = PasswordGenerator.generateNewPassword(8); // Пример: генерация пароля длиной 5 символов
-
-        // Сохраняем новый пароль в базе данных (с использованием шифрования)
-        user.setPassword(passwordService.encodePassword(newPassword));
-        userRepository.save(user);
-
-        // Отправляем пользователю новый пароль по email
-        emailService.sendPasswordReset(email, newPassword);
-        redirectAttributes.addFlashAttribute("successMessage", "Новый пароль отправлен на указанный email");
-
         return "redirect:/forgot-password";
     }
 
