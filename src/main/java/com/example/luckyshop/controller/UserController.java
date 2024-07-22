@@ -19,6 +19,20 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final EntityManager entityManager;
+
+
+
+    @GetMapping("/profile")
+    public String viewProfile(Model model, Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+
+        // Здесь нужно добавить логику для получения данных пользователя
+        User user = userService.findByUsername(username);
+        model.addAttribute("user", user);
+
+        return "user/profile";
+    }
     @GetMapping("/change-password")
     public String showChangePasswordForm() {
         return "Auth/password-change";
