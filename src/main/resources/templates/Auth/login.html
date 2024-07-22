@@ -1,27 +1,90 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html lang="en">&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>Title</title>&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+<!--&lt;!&ndash;<form th:action="@{/login}" method="post">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <label>Логин:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="text" name="username" required />&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <label>Пароль:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="password" name="password" required />&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button type="submit">Войти</button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+<!--&lt;!&ndash;<p>Забыли пароль? <a th:href="@{/forgot-password}">Сбросить пароль</a></p>&ndash;&gt;-->
+<!--&lt;!&ndash;<p>Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a></p>&ndash;&gt;-->
+<!--&lt;!&ndash;<p><a href="/">На главную страницу</a></p>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Login</title>-->
+<!--    <link rel="stylesheet" href="/css/bootstrap.min.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container mt-5">-->
+<!--    <h2>Login</h2>-->
+<!--    <form th:action="@{/login}" method="post">-->
+<!--        <div class="form-group">-->
+<!--            <label for="username">Username</label>-->
+<!--            <input type="text" id="username" name="username" class="form-control" required>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <label for="password">Password</label>-->
+<!--            <input type="password" id="password" name="password" class="form-control" required>-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Login</button>-->
+<!--    </form>-->
+<!--    <p>Забыли пароль? <a th:href="@{/forgot-password}">Сбросить пароль</a></p>-->
+<!--    <p>Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a></p>-->
+<!--    <p><a href="/">На главную страницу</a></p>-->
+<!--    &lt;!&ndash; Сообщение об успешной регистрации &ndash;&gt;-->
+<!--    <p th:if="${message}" class="alert alert-success" th:text="${message}"></p>-->
+<!--    &lt;!&ndash; Сообщение об ошибке &ndash;&gt;-->
+<!--    <p th:if="${error}" class="alert alert-danger" th:text="${error}"></p>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 <body>
-<form th:action="@{/login}" method="post">
-    <div>
-        <label>Логин:</label>
-        <input type="text" name="username" required />
+<div class="container mt-5">
+    <h2>Login</h2>
+    <form th:action="@{/login}" th:object="${user}" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p>Забыли пароль? <a th:href="@{/forgot-password}">Сбросить пароль</a></p>
+        <p>Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a></p>
+        <p><a href="/">На главную страницу</a></p>
+        <p th:if="${message}" class="alert alert-success" th:text="${message}"></p>
+        <p th:if="${error}" class="alert alert-danger" th:text="${error}"></p>
     </div>
-    <div>
-        <label>Пароль:</label>
-        <input type="password" name="password" required />
-    </div>
-    <div>
-        <button type="submit">Войти</button>
-    </div>
-</form>
-<p>Забыли пароль? <a th:href="@{/forgot-password}">Сбросить пароль</a></p>
-<p>Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a></p>
-<p><a href="/">На главную страницу</a></p>
-</div>
-
-</body>
-</html>
+    </body>
+    </html>

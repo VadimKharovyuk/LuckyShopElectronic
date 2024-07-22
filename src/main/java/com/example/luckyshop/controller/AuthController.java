@@ -5,6 +5,8 @@ import com.example.luckyshop.repository.UserRepository;
 import com.example.luckyshop.service.PasswordService;
 import com.example.luckyshop.service.UserService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,9 @@ public class AuthController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordService passwordService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+
 
 
     @GetMapping("/login")
@@ -29,16 +34,16 @@ public class AuthController {
         return "Auth/login";
     }
     @GetMapping("/activate")
-    public String activateAccount(@RequestParam("token") String token, RedirectAttributes redirectAttributes) {
+    public String activateAccount(@RequestParam("token") String token, RedirectAttributes redirectAttributes, Model model) {
         boolean activated = userService.activateUser(token);
         if (activated) {
             redirectAttributes.addFlashAttribute("message", "Account activated successfully. You can now log in.");
-            return "redirect:/login";
         } else {
             redirectAttributes.addFlashAttribute("error", "Invalid activation token.");
-            return "redirect:/register";
         }
+        return "Auth/activationSuccess";
     }
+
 
 
     @PostMapping("/login")
@@ -46,10 +51,9 @@ public class AuthController {
         User existingUser = userRepository.findByUsername(user.getUsername());
 
         if (existingUser == null || !passwordService.matches(user.getPassword(), existingUser.getPassword())) {
-            redirectAttributes.addFlashAttribute("error", "Пароль или логин неправильный");
+            redirectAttributes.addFlashAttribute("error", "Вы ввели неправильный логин или пароль");
             return "redirect:/login";
         }
-
         // Проверка, заблокирован ли пользователь
         if (existingUser.isBlocked()) {
             // Редирект на страницу с сообщением о блокировке
@@ -59,6 +63,7 @@ public class AuthController {
         // Логика входа
         return "redirect:/";
     }
+
 
     @GetMapping("/blocked")
     public String showBlockedPage() {
@@ -72,40 +77,23 @@ public class AuthController {
         model.addAttribute("user", new User());
         return "Auth/register";
     }
-//    @PostMapping("/register")
-//    public String register(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
-//        // Проверка, существует ли пользователь с таким email
-//        if (userService.existsByEmail(user.getEmail())) {
-//            redirectAttributes.addFlashAttribute("error", "Эта почта уже используется");
-//            return "redirect:/register";
-//        }
-//
-//        userService.registerUser(user);
-//
-//        // Проверка, заблокирован ли пользователь
-//        if (userService.isBlocked(user.getUsername())) {
-//            redirectAttributes.addFlashAttribute("error", "Этот аккаунт заблокирован. Обратитесь к администратору для разблокировки.");
-//            return "redirect:/register";
-//        }
-//
-//        return "redirect:/login";
-//
-//    }
-@PostMapping("/register")
-public String register(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+    @PostMapping("/register")
+    public String register(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+        if (userService.existsByEmail(user.getEmail())) {
+            redirectAttributes.addFlashAttribute("error", "Эта почта уже используется");
+            return "redirect:/register";
+        }
 
-    if (userService.existsByEmail(user.getEmail())) {
-        redirectAttributes.addFlashAttribute("error", "Эта почта уже используется");
-        return "redirect:/register";
+        userService.registerUser(user);
+
+        // Логирование сообщения
+        logger.info("Message added to redirectAttributes: Проверьте вашу почту, чтобы активировать аккаунт.");
+
+        redirectAttributes.addFlashAttribute("message", "Проверьте вашу почту, чтобы активировать аккаунт.");
+        return "redirect:/login";
     }
 
-    userService.registerUser(user);
-
-    redirectAttributes.addFlashAttribute("message", "Проверьте вашу почту, чтобы активировать аккаунт.");
-    return "redirect:/login";
-}
-
-
 
 
 }
+
