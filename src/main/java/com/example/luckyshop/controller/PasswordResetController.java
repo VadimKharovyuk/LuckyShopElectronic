@@ -14,10 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @AllArgsConstructor
 public class PasswordResetController {
 
-    private final UserRepository userRepository;
-    private final EmailService emailService;
     private final PasswordService passwordService;
-
 
 
     @GetMapping("/forgot-password")

@@ -13,8 +13,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
+        model.addAttribute("categories", categoryService.categoryList());
 
-        model.addAttribute("category", categoryService.categoryList());
         return "homePage";
     }
 }

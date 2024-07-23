@@ -28,7 +28,11 @@
             overflow: hidden;
         }
         .categories .card-img-top {
+            height: 90px;
+            object-fit: cover;
+            width: 130px;
             transition: transform 0.3s;
+
         }
         .categories .card-img-top:hover {
             transform: scale(1.1);
@@ -37,7 +41,7 @@
             border: none;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
         }
         .featured-products .card-img-top {
             transition: transform 0.3s;
@@ -61,7 +65,7 @@
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">LuckyShop</a>
+    <a class="navbar-brand" href="/">LuckyShop</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -112,69 +116,14 @@
     <div class="container">
         <h2 class="text-center mb-4">Shop by Category</h2>
         <div class="row">
-            <div class="col-md-4 mb-4">
+            <!-- Thymeleaf loop to display categories -->
+            <div class="col-md-4 mb-4" th:each="category : ${categories}">
                 <div class="card">
-                    <img src="/images/laptops.jpg" class="card-img-top" alt="Laptops">
+                    <img th:src="@{'/pic/' + ${category.picURL}}" class="card-img-top" alt="Category Image">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Laptops</h5>
-                        <a href="/products?category=laptops" class="btn btn-primary">View Laptops</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/smartphones.jpg" class="card-img-top" alt="Smartphones">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Smartphones</h5>
-                        <a href="/products?category=smartphones" class="btn btn-primary">View Smartphones</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/accessories.jpg" class="card-img-top" alt="Accessories">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Accessories</h5>
-                        <a href="/products?category=accessories" class="btn btn-primary">View Accessories</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Featured Products Section -->
-<section class="featured-products py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Featured Products</h2>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/product1.jpg" class="card-img-top" alt="Product 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Product 1</h5>
-                        <p class="card-text">$499.99</p>
-                        <a href="/product/1" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/product2.jpg" class="card-img-top" alt="Product 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Product 2</h5>
-                        <p class="card-text">$299.99</p>
-                        <a href="/product/2" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/images/product3.jpg" class="card-img-top" alt="Product 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Product 3</h5>
-                        <p class="card-text">$149.99</p>
-                        <a href="/product/3" class="btn btn-primary">View Details</a>
+                        <h5 class="card-title" th:text="${category.name}">Category Name</h5>
+                        <!-- Link to view all products in this category -->
+                        <a th:href="@{/products/category/{categoryId}(categoryId=${category.id})}" class="btn btn-primary" th:text="'View ' + ${category.name} + ' Products'">View Products</a>
                     </div>
                 </div>
             </div>
